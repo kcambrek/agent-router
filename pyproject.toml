@@ -1,0 +1,15 @@
+[project]
+name = "langgraph-router"
+version = "0.1.0"
+description = "Exploration of an embedding-based LangGraph agent router (stand-in specialists)."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.141.1",
+    "langchain>=1.4.0",
+    "langchain-openai>=1.6.2",
+    "langgraph>=1.2.11",
+    "mlflow>=3.16.1",
+    "numpy>=2.5.3",
+    "python-dotenv>=1.2.3",
+]
