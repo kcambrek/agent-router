@@ -20,7 +20,7 @@ from utils import embed, l2_normalize
 # Minimum cosine similarity to select a specialist. Override with
 # ROUTER_SCORE_THRESHOLD. Short queries often score 0.2–0.4 against the
 # canned examples; paraphrases of those examples score much higher.
-SCORE_THRESHOLD = float(os.getenv("ROUTER_SCORE_THRESHOLD", "0.7"))
+SCORE_THRESHOLD = float(os.getenv("ROUTER_SCORE_THRESHOLD", "0.3"))
 TOP_K = 3
 
 _mlflow_uri = os.getenv("MLFLOW_TRACKING_URI")
