@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "langgraph",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "langgraph",
+      "Username": "langgraph",
+      "SSLMode": "disable",
+      "PasswordExecCommand": "echo langgraph"
+    }
+  }
+}

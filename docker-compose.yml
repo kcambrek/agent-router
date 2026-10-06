@@ -1,6 +1,6 @@
 services:
   mlflow:
-    image: ghcr.io/mlflow/mlflow:latest
+    build: ./mlflow
     container_name: mlflow
     ports:
       - "5000:5000"
@@ -15,7 +15,7 @@ services:
       - --port
       - "5000"
       - --backend-store-uri
-      - sqlite:////mlflow/mlflow.db
+      - postgresql://langgraph:langgraph@postgres:5432/mlflow
       - --default-artifact-root
       - /mlflow/artifacts
       - --allowed-hosts
@@ -32,6 +32,9 @@ services:
       timeout: 5s
       retries: 12
       start_period: 15s
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
 
   postgres:
@@ -45,6 +48,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U langgraph -d langgraph"]
       interval: 5s
@@ -52,6 +56,28 @@ services:
       retries: 12
     restart: unless-stopped
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: langgraph-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      # Desktop mode: no login screen. Local dev only.
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+      # Lets servers.json supply the DB password via PasswordExecCommand.
+      PGADMIN_CONFIG_ENABLE_SERVER_PASS_EXEC_CMD: "True"
+    ports:
+      - "5050:80"
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   mlflow-data:
   postgres-data:
+  pgadmin-data:

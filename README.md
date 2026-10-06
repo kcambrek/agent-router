@@ -27,7 +27,9 @@ Startup hits the embedding API once for every canned example in `agent_registry.
 
 Conversation state is checkpointed in Postgres. On `quit` / `exit` the CLI prints the latest checkpoint stored for the thread.
 
-MLflow is optional. To enable tracing, set `MLFLOW_TRACKING_URI=http://127.0.0.1:5000` in `.env`.
+To browse the checkpoint tables, open pgAdmin at <http://localhost:5050>. It runs in desktop mode (no login) with the `langgraph` server pre-registered from `pgadmin/servers.json`. Tables are under `langgraph` → Databases → `langgraph` → Schemas → `public` → Tables. Local dev only: anyone who can reach port 5050 gets full DB access.
+
+MLflow is optional. To enable tracing, set `MLFLOW_TRACKING_URI=http://127.0.0.1:5000` in `.env`. MLflow stores runs and traces in the `mlflow` database on the same Postgres (created by `postgres/init/` on a fresh volume); artifacts stay in the `mlflow-data` volume.
 
 ## Config
 
